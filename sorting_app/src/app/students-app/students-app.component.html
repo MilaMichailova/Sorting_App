@@ -1,0 +1,27 @@
+<div *ngIf="isLoading" class="loading-state"></div>
+<div>
+  <button (click)="fillStudents()">Сгенерировать данные</button>
+</div>
+<div>
+  <button (click)="bubbleSort()">Пузырьковая сортировка</button>
+  <button (click)="cycleSort(students)">Циклическая сортировка</button>
+  <button (click)="selectedSort()">Сортировка выбором</button>
+  <button (click)="fastSort(students)">Быстрая сортировка</button>
+  <select [(ngModel)]="selectedSortType">
+    <option value="firstName">по имени</option>
+    <option value="lastName">по фамилии</option>
+    <option value="age">по возрасту</option>
+  </select>
+</div>
+
+<div>
+  <table>
+    <tr *ngFor="let student of students; index as i">
+      <td>{{ i + 1 }}</td>
+      <td>{{ student.firstName }}</td>
+      <td>{{ student.lastName }}</td>
+      <td>{{ student.age }}</td>
+    </tr>
+  </table>
+</div>
+<div>отсортировано за : сек.</div>
