@@ -33,6 +33,7 @@ export class StudentsAppComponent {
    * Заполняет массив студентов случайно сгенерированными объектами в количестве 10 000 штук.
    */
   fillStudents() {
+    this.students = [];
     while (this.students.length < 10_000) {
       this.students.push(this.createStudent());
     }
@@ -75,10 +76,15 @@ export class StudentsAppComponent {
           min = j;
         }
       }
-      this.students[i] = this.students[min];
+      // this.students[i] = this.students[min];
 
-      const tmp = this.students[i];
-      this.students[min] = tmp;
+      // const tmp = this.students[i];
+      // this.students[min] = tmp;
+
+      [this.students[i], this.students[min]] = [
+        this.students[min],
+        this.students[i],
+      ];
     }
     console.log('выбором', this.students);
     this.isLoading = false;
@@ -103,6 +109,144 @@ export class StudentsAppComponent {
   //   }
   //   return console.log('выбором', this.students);
   // }
+
+  cycleSort() {
+    for (let i = 0; i < this.students.length; i++) {
+      let currentlySelectedItem = this.students[i];
+      let position = i;
+      for (let j = i + 1; j < this.students.length; j++) {
+        if (
+          this.students[j][this.selectedSortType] <
+          currentlySelectedItem[this.selectedSortType]
+        ) {
+          position++;
+        }
+      }
+      if (position === i) {
+        continue;
+      }
+      while (
+        currentlySelectedItem[this.selectedSortType] ===
+        this.students[position][this.selectedSortType]
+      ) {
+        position++;
+      }
+      [this.students[position], currentlySelectedItem] = [
+        currentlySelectedItem,
+        this.students[position],
+      ];
+      while (position !== i) {
+        position = i;
+        for (let k = i + 1; k < this.students.length; k++) {
+          if (
+            this.students[k][this.selectedSortType] <
+            currentlySelectedItem[this.selectedSortType]
+          ) {
+            position++;
+          }
+        }
+        while (
+          currentlySelectedItem[this.selectedSortType] ===
+          this.students[position][this.selectedSortType]
+        ) {
+          position++;
+        }
+        [this.students[position], currentlySelectedItem] = [
+          currentlySelectedItem,
+          this.students[position],
+        ];
+      }
+    }
+    // return arr;
+    console.log('циклически', this.students);
+  }
+
+  testSelectedSort() {
+    const array = [3, 8, 5, 11];
+    for (let i = 0; i < array.length; i++) {
+      let min = i;
+
+      for (let j = i + 1; j < array.length; j++) {
+        if (array[min] > array[j]) {
+          min = j;
+        }
+      }
+      [array[i], array[min]] = [array[min], array[i]];
+    }
+    console.log('выбором тест', array);
+  }
+
+  testFastSort() {
+    const array = [3, 8, 5, 11];
+
+    this.quickSort(array, 0, array.length - 1);
+    console.log('быстрая', array);
+  }
+
+  private quickSort(array: number[], start: any, end: any) {
+    if (start < end) {
+      const pi = this.partition(array, start, end);
+
+      this.quickSort(array, start, pi - 1);
+      this.quickSort(array, pi + 1, end);
+    }
+  }
+
+  private partition(array: number[], start: any, end: any) {
+    const pivot = array[end];
+    let i = start;
+
+    for (let j = start; j <= end - 1; j++) {
+      if (array[j] <= pivot) {
+        [array[i], array[j]] = [array[j], array[i]];
+        i++;
+      }
+    }
+
+    [array[i], array[end]] = [array[end], array[i]];
+    return i;
+  }
+
+  testNumberCycleSort() {
+    const array = [3, 8, 5, 11];
+
+    for (let i = 0; i < array.length; i++) {
+      let currentlySelectedItem = array[i];
+      let position = i;
+      for (let j = i + 1; j < array.length; j++) {
+        if (array[j] < currentlySelectedItem) {
+          position++;
+        }
+      }
+      if (position === i) {
+        continue;
+      }
+      while (currentlySelectedItem === array[position]) {
+        position++;
+      }
+      [array[position], currentlySelectedItem] = [
+        currentlySelectedItem,
+        array[position],
+      ];
+      while (position !== i) {
+        position = i;
+        for (let k = i + 1; k < array.length; k++) {
+          if (array[k] < currentlySelectedItem) {
+            position++;
+          }
+        }
+        while (currentlySelectedItem === array[position]) {
+          position++;
+        }
+        [array[position], currentlySelectedItem] = [
+          currentlySelectedItem,
+          array[position],
+        ];
+      }
+    }
+    // return arr;
+    console.log('циклически', array);
+  }
 
   private randomString(length: number): string {
     let randomChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -130,47 +274,7 @@ export class StudentsAppComponent {
     return student;
   }
 
-  cycleSort(arr: IStudent[]) {
-    this.sortCycle(arr); ///переделать все так
-  }
-
-  private sortCycle(arr: IStudent[]) {
-    for (let i = 0; i < arr.length; i++) {
-      let value = arr[i];
-      let position = i;
-      for (let j = i + 1; j < arr.length; j++) {
-        if (arr[j] < value) {
-          position++;
-        }
-      }
-      if (position === i) {
-        continue;
-      }
-      while (value === arr[position]) {
-        position++;
-      }
-      [arr[position], value] = [value, arr[position]];
-      while (position !== i) {
-        position = i;
-        for (let k = i + 1; k < arr.length; k++) {
-          if (arr[k] < value) {
-            position++;
-          }
-        }
-        while (value === arr[position]) {
-          position++;
-        }
-        [arr[position], value] = [value, arr[position]];
-      }
-    }
-    // return arr;
-    return console.log('циклически', this.students);
-  }
-
-  fastSort(arr: IStudent[]) {
-    this.sortFast(arr);
-  }
-  private sortFast(arr: IStudent[]) {
+  fastSort() {
     const partition = (arr: IStudent[], start: any, end: any) => {
       const pivot = arr[end];
       let i = start;

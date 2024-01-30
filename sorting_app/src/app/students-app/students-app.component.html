@@ -1,12 +1,18 @@
 <div *ngIf="isLoading" class="loading-state"></div>
 <div>
   <button (click)="fillStudents()">Сгенерировать данные</button>
+  <button (click)="testNumberCycleSort()">
+    Временная циклическая сортировка
+  </button>
+
+  <button (click)="testSelectedSort()">тест сортировки выбором</button>
+  <button (click)="testFastSort()">тест быстрой сортировки</button>
 </div>
 <div>
   <button (click)="bubbleSort()">Пузырьковая сортировка</button>
-  <button (click)="cycleSort(students)">Циклическая сортировка</button>
+  <button (click)="cycleSort()">Циклическая сортировка</button>
   <button (click)="selectedSort()">Сортировка выбором</button>
-  <button (click)="fastSort(students)">Быстрая сортировка</button>
+  <button (click)="fastSort()">Быстрая сортировка</button>
   <select [(ngModel)]="selectedSortType">
     <option value="firstName">по имени</option>
     <option value="lastName">по фамилии</option>
